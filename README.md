@@ -18,13 +18,22 @@ set -a && source .env.dev && set +a
 go run ./cmd/skills-mcp-server
 ```
 
-## Examples (instruction-only skills)
+## Skills directory
 
-Markdown-first Agent Skills live under [`examples/agent-skills/`](examples/agent-skills/). Copy a folder into your runtime `skills/` directory (see `examples/agent-skills/README.md`) so `list_skills` / `read_skill` can load them—same shape as community Claude-style procedural skills on GitHub.
+Runtime skills live under **`SKILLS_MCP_SERVER_DIR`** (default `./skills`). You can add them manually (REST CRUD, `cp`, CI) or rely on **startup seeding** from the repo’s [`examples/`](examples/) tree.
 
-### Built-in `read-web` skill (seeded)
+### Seeding from `examples/` (default on)
 
-When `SKILLS_SEED_BUILTIN_READ_WEB` is true (default), startup writes embedded content to `SKILLS_MCP_SERVER_DIR/read-web/` **only if** `read-web/SKILL.md` is not already present—so **`read-web` appears in `list_skills` like a CRUD-created skill**. Tool execution is still the Go-backed `read_web` MCP tool + REST alias; the markdown explains when to use it and how agents should call the tool.
+On startup, each **direct subdirectory** of **`SKILLS_EXAMPLES_DIR`** that contains a top-level `SKILL.md` is copied into `SKILLS_MCP_SERVER_DIR/<name>/` **only if** that skill does not already exist there (first write wins; idempotent across restarts).
+
+| Env | Default | Meaning |
+|-----|---------|--------|
+| `SKILLS_SEED_EXAMPLES` | `true` | Set `false` to disable seeding entirely |
+| `SKILLS_EXAMPLES_DIR` | `examples` (relative to process cwd) | Source tree; Docker image sets `/app/examples` |
+
+The Docker image **`COPY`s `examples/`** into `/app/examples` and sets `SKILLS_EXAMPLES_DIR` so Compose volumes get populated on first boot.
+
+For **`read-web`**, markdown is for discovery; execution is still the Go **`read_web`** MCP tool + REST alias.
 
 Health:
 

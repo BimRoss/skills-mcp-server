@@ -10,9 +10,11 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /out/skills-mcp-server ./c
 FROM alpine:3.20
 WORKDIR /app
 COPY --from=builder /out/skills-mcp-server /usr/local/bin/skills-mcp-server
+COPY examples /app/examples
 
 ENV SKILLS_MCP_SERVER_PORT=8081
 ENV SKILLS_MCP_SERVER_DIR=/app/skills
+ENV SKILLS_EXAMPLES_DIR=/app/examples
 
 RUN mkdir -p /app/skills
 EXPOSE 8081

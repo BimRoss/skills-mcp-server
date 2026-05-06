@@ -20,9 +20,9 @@ func New(cfg config.Config) (*App, error) {
 	if err != nil {
 		return nil, fmt.Errorf("build store: %w", err)
 	}
-	if cfg.SeedBuiltinReadWebSkill {
-		if err := skills.SeedBundledReadWeb(store); err != nil {
-			return nil, fmt.Errorf("seed read-web skill: %w", err)
+	if cfg.SeedExamples {
+		if err := skills.SeedExamplesFromDir(store, cfg.ExamplesDir); err != nil {
+			return nil, fmt.Errorf("seed examples into skills dir: %w", err)
 		}
 	}
 	readWeb := readweb.New(readweb.Config{
