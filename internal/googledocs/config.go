@@ -22,25 +22,25 @@ func firstNonEmpty(values ...string) string {
 	return ""
 }
 
-// LoadFromEnv reads global Google OAuth env vars. Resolution order prefers explicit
-// GOOGLE_CLIENT_* (agent-factory / employee-factory), then GOOGLE_OAUTH_* (portal-style),
-// then JOANNE_GOOGLE_* employee overrides.
+// LoadFromEnv reads Google OAuth env vars for create_google_doc.
+// Joanne keys win first so a combined .env (portal GOOGLE_OAUTH_* + worker JOANNE_*)
+// does not pair a portal client with a Joanne-issued refresh token (oauth2 unauthorized_client).
 func LoadFromEnv() EnvConfig {
 	return EnvConfig{
 		ClientID: firstNonEmpty(
+			os.Getenv("JOANNE_GOOGLE_CLIENT_ID"),
 			os.Getenv("GOOGLE_CLIENT_ID"),
 			os.Getenv("GOOGLE_OAUTH_CLIENT_ID"),
-			os.Getenv("JOANNE_GOOGLE_CLIENT_ID"),
 		),
 		ClientSecret: firstNonEmpty(
+			os.Getenv("JOANNE_GOOGLE_CLIENT_SECRET"),
 			os.Getenv("GOOGLE_CLIENT_SECRET"),
 			os.Getenv("GOOGLE_OAUTH_CLIENT_SECRET"),
-			os.Getenv("JOANNE_GOOGLE_CLIENT_SECRET"),
 		),
 		RefreshToken: firstNonEmpty(
+			os.Getenv("JOANNE_GOOGLE_REFRESH_TOKEN"),
 			os.Getenv("GOOGLE_REFRESH_TOKEN"),
 			os.Getenv("GOOGLE_OAUTH_REFRESH_TOKEN"),
-			os.Getenv("JOANNE_GOOGLE_REFRESH_TOKEN"),
 		),
 	}
 }
@@ -48,13 +48,13 @@ func LoadFromEnv() EnvConfig {
 // Validate returns an error if any required field is missing.
 func (c EnvConfig) Validate() error {
 	if strings.TrimSpace(c.ClientID) == "" {
-		return fmt.Errorf("create_google_doc: missing Google OAuth client id (set GOOGLE_CLIENT_ID or GOOGLE_OAUTH_CLIENT_ID)")
+		return fmt.Errorf("create_google_doc: missing Google OAuth client id (set JOANNE_GOOGLE_CLIENT_ID, or GOOGLE_CLIENT_ID / GOOGLE_OAUTH_CLIENT_ID)")
 	}
 	if strings.TrimSpace(c.ClientSecret) == "" {
-		return fmt.Errorf("create_google_doc: missing Google OAuth client secret (set GOOGLE_CLIENT_SECRET or GOOGLE_OAUTH_CLIENT_SECRET)")
+		return fmt.Errorf("create_google_doc: missing Google OAuth client secret (set JOANNE_GOOGLE_CLIENT_SECRET, or GOOGLE_CLIENT_SECRET / GOOGLE_OAUTH_CLIENT_SECRET)")
 	}
 	if strings.TrimSpace(c.RefreshToken) == "" {
-		return fmt.Errorf("create_google_doc: missing Google OAuth refresh token (set GOOGLE_REFRESH_TOKEN or GOOGLE_OAUTH_REFRESH_TOKEN; user-delegated Docs scope)")
+		return fmt.Errorf("create_google_doc: missing Google OAuth refresh token (set JOANNE_GOOGLE_REFRESH_TOKEN, or GOOGLE_REFRESH_TOKEN / GOOGLE_OAUTH_REFRESH_TOKEN; Docs + drive.file)")
 	}
 	return nil
 }

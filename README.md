@@ -72,4 +72,4 @@ Executable capabilities (`tools/list`, `tools/call`) are registered in Go via [`
   - `read_skill_resource`
   - `get_skill_resource_info`
   - `read_web`
-  - `create_google_doc` (Google OAuth refresh token + Docs/Drive scopes; see `.env.dev.example`)
+  - `create_google_doc` (OAuth: **`JOANNE_GOOGLE_*`** preferred in shared env; see `.env.dev.example`)

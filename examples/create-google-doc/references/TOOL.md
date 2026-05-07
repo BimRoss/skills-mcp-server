@@ -14,11 +14,11 @@
 
 | Variable | Notes |
 |----------|--------|
-| `GOOGLE_CLIENT_ID` / `GOOGLE_OAUTH_CLIENT_ID` / `JOANNE_GOOGLE_CLIENT_ID` | OAuth client id (first non-empty wins in that order). |
-| `GOOGLE_CLIENT_SECRET` / `GOOGLE_OAUTH_CLIENT_SECRET` / `JOANNE_GOOGLE_CLIENT_SECRET` | Client secret. |
-| `GOOGLE_REFRESH_TOKEN` / `GOOGLE_OAUTH_REFRESH_TOKEN` / `JOANNE_GOOGLE_REFRESH_TOKEN` | **Required** for server-side API calls. Must be issued with scopes including **Google Docs** and **Drive file** access (`drive.file`). |
+| **`JOANNE_GOOGLE_CLIENT_ID`** / `GOOGLE_CLIENT_ID` / `GOOGLE_OAUTH_CLIENT_ID` | OAuth client id (**Joanne first** so portal `GOOGLE_OAUTH_*` in the same file does not steal the client paired with Joanne’s refresh token). |
+| **`JOANNE_GOOGLE_CLIENT_SECRET`** / … | Client secret (same precedence). |
+| **`JOANNE_GOOGLE_REFRESH_TOKEN`** / … | **Required** for server-side API calls; must be issued for the **same** OAuth client as id/secret. Scopes: **Docs** + **`drive.file`**. |
 
-Portal-style **`GOOGLE_OAUTH_CLIENT_*`** names are supported so local compose can reuse the same keys as makeacompany-ai OAuth apps.
+Portal-style **`GOOGLE_OAUTH_CLIENT_*`** remains supported as **fallback** when Joanne keys are unset.
 
 ## Parity
 

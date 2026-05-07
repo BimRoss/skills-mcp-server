@@ -7,7 +7,7 @@ metadata:
   version: "1.0"
   execution: mcp-tool-create_google_doc
   skillFactoryParity: skill.contract.v1 / create-google-doc
-compatibility: Requires skills-mcp-server OAuth env (Google Docs + Drive `drive.file` delegated via refresh token). Client id/secret may use `GOOGLE_CLIENT_ID` / `GOOGLE_OAUTH_CLIENT_ID` style names; a **refresh token** with Docs scopes is mandatory for API calls.
+compatibility: Requires skills-mcp-server OAuth env (Google Docs + Drive `drive.file` via refresh token). In shared `.env` files, set **`JOANNE_GOOGLE_*`** so portal `GOOGLE_OAUTH_*` keys are not mixed with Joanne’s refresh token.
 ---
 
 # Create Google Doc
