@@ -17,7 +17,7 @@ func (t *listSkillsTool) Name() string { return "list_skills" }
 func (t *listSkillsTool) Definition() map[string]any {
 	return map[string]any{
 		"name":        "list_skills",
-		"description": "List all available skills",
+		"description": "Return registered agent skills (id, description, metadata). Use when the user asks what skills or capabilities exist, what you can do, what tools are available, or wants a skimmable catalog before deeper reads. Optional `query` filters by substring over name/description.",
 		"inputSchema": map[string]any{
 			"type":       "object",
 			"properties": map[string]any{"query": map[string]any{"type": "string"}},
@@ -46,7 +46,7 @@ func (t *searchSkillsTool) Name() string { return "search_skills" }
 func (t *searchSkillsTool) Definition() map[string]any {
 	return map[string]any{
 		"name":        "search_skills",
-		"description": "Search skills by text query",
+		"description": "Find skills whose name or description match `query`. Use when the user describes a goal without naming a skill id (e.g. roster, directory, onboarding, research), or when you need the canonical skill folder name before calling read_skill.",
 		"inputSchema": map[string]any{
 			"type":       "object",
 			"required":   []string{"query"},
@@ -78,7 +78,7 @@ func (t *readSkillTool) Name() string { return "read_skill" }
 func (t *readSkillTool) Definition() map[string]any {
 	return map[string]any{
 		"name":        "read_skill",
-		"description": "Read full content for a single skill",
+		"description": "Load full markdown instructions for one skill. Required argument `name` is the skill id (the catalog folder name). Use when the user names a skill, asks to read or follow packaged guidance, or when the answer should come from stored skill text—not free recall alone. For squad/company directory, who works here, which agents or specialists exist, introductions, or phrases like \"read the company directory\": prefer read_skill once you know the id (search_skills with query like \"directory\" or \"roster\" if needed); many deployments ship a `read-company-directory` skill for that.",
 		"inputSchema": map[string]any{
 			"type":       "object",
 			"required":   []string{"name"},
