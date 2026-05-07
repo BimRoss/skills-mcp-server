@@ -60,6 +60,8 @@ curl http://localhost:8081/health
 
 Executable capabilities (`tools/list`, `tools/call`) are registered in Go via [`internal/tools`](internal/tools) (`Registry` + per-tool `Tool` implementations). Agent-facing markdown skills under `SKILLS_MCP_SERVER_DIR` are separate (discovery via `list_skills` / `read_skill`). Callers such as **`agents-mcp-server`** should keep using stable tool names (`read_web`, `create_google_doc`, etc.).
 
+**Employee scoping at the caller:** `agents-mcp-server` drops **`create_google_doc`** from the router’s tool list for every employee **except Joanne**, because this server’s Google OAuth env is Joanne’s account. The MCP endpoint still advertises the tool for other clients (Cursor, scripts); enforce your own policy there if needed.
+
 `POST /mcp` with JSON-RPC 2.0:
 
 - `initialize`
