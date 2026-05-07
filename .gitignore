@@ -3,4 +3,4 @@
 .env.prod
 bin/
 tmp/
-skills/
+/skills/
