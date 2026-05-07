@@ -10,6 +10,8 @@
 
 `POST /api/runtime/create-google-doc` with the same JSON body as MCP `arguments`.
 
+Drive ACL grants use **invite notifications** (`sendNotificationEmail=true`) so addresses without an existing Google account can accept editor/commenter/viewer access (Drive rejects silent shares for those recipients).
+
 ## Environment (skills-mcp-server)
 
 | Variable | Notes |

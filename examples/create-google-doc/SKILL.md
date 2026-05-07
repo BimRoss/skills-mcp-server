@@ -32,7 +32,7 @@ Invoke MCP tool:
 - **Required JSON arguments:** `intent` (string), `title` (string), `editors` (array of email strings)
 - **Optional:** `body` (plain text; if empty, `intent` is used as the doc body), `commenters`, `viewers`, `type`, `length` (hints only; `type`/`length` are ignored by this server build)
 
-`editors` / `commenters` / `viewers` must be **valid email addresses** for Google accounts.
+`editors` / `commenters` / `viewers` must be **valid email addresses**. The server asks Drive to **send invite notifications** so people without a Google account yet can still accept editor/commenter/viewer access.
 
 ## Output
 

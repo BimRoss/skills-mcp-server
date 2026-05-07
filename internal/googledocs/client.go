@@ -194,7 +194,9 @@ func (c *Client) grantPermission(ctx context.Context, documentID, email, role st
 		return err
 	}
 	q := url.Values{}
-	q.Set("sendNotificationEmail", "false")
+	// Drive rejects user invites without notify when the address has no Google account yet
+	// (invalidSharingRequest). Default on so editor/commenter/viewer grants work for any valid email.
+	q.Set("sendNotificationEmail", "true")
 	q.Set("supportsAllDrives", "true")
 	endpoint := fmt.Sprintf("%s/%s/permissions?%s", drivePermissionsBase, url.PathEscape(documentID), q.Encode())
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, endpoint, bytes.NewReader(body))

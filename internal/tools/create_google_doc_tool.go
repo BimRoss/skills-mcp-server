@@ -18,7 +18,7 @@ func (t *createGoogleDocTool) Name() string { return "create_google_doc" }
 func (t *createGoogleDocTool) Definition() map[string]any {
 	return map[string]any{
 		"name":        "create_google_doc",
-		"description": "Create a Google Doc, insert body text, and grant Drive sharing to listed Google accounts. Use when the user wants a shared Google document, meeting notes captured in Docs, or a draft others can edit. Requires server OAuth refresh token + Docs/Drive scopes. Editors/commenters/viewers must be valid email addresses.",
+		"description": "Create a Google Doc, insert body text, and grant Drive sharing to listed emails (editor/commenter/viewer). Sends Drive invite notifications by default so recipients without an existing Google account can accept access. Use when the user wants a shared Google document, meeting notes in Docs, or a draft others can edit. Requires server OAuth refresh token + Docs/Drive scopes. Editors/commenters/viewers must be valid email addresses.",
 		"inputSchema": map[string]any{
 			"type":     "object",
 			"required": []string{"intent", "title", "editors"},
@@ -33,17 +33,17 @@ func (t *createGoogleDocTool) Definition() map[string]any {
 				},
 				"editors": map[string]any{
 					"type":        "array",
-					"description": "Email addresses to grant writer (editor) access.",
+					"description": "Email addresses to grant writer (editor) access. Drive sends an invite email so the recipient can accept (required for addresses without a Google account yet).",
 					"items":       map[string]any{"type": "string"},
 				},
 				"commenters": map[string]any{
 					"type":        "array",
-					"description": "Optional emails for commenter access (not also editors).",
+					"description": "Optional emails for commenter access (not also editors). Invite emails are sent the same way as editors.",
 					"items":       map[string]any{"type": "string"},
 				},
 				"viewers": map[string]any{
 					"type":        "array",
-					"description": "Optional read-only viewer emails (excluding editors and commenters).",
+					"description": "Optional read-only viewer emails (excluding editors and commenters). Invite emails are sent the same way as editors.",
 					"items":       map[string]any{"type": "string"},
 				},
 				"type": map[string]any{
