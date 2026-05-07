@@ -33,7 +33,7 @@ On startup, each **direct subdirectory** of **`SKILLS_EXAMPLES_DIR`** that conta
 
 The Docker image **`COPY`s `examples/`** into `/app/examples` and sets `SKILLS_EXAMPLES_DIR` so Compose volumes get populated on first boot.
 
-For **`read-web`**, markdown is for discovery; execution is still the Go **`read_web`** MCP tool + REST alias.
+For **`read-web`**, markdown is for discovery; execution is still the Go **`read_web`** MCP tool + REST alias. For **`create-google-doc`**, discovery is markdown under `examples/create-google-doc/`; execution is **`create_google_doc`** + `POST /api/runtime/create-google-doc`.
 
 Health:
 
@@ -54,10 +54,11 @@ curl http://localhost:8081/health
 - `PUT /api/skills/:name/resources/:path`
 - `DELETE /api/skills/:name/resources/:path`
 - `POST /api/runtime/read-web`
+- `POST /api/runtime/create-google-doc`
 
 ## MCP
 
-Executable capabilities (`tools/list`, `tools/call`) are registered in Go via [`internal/tools`](internal/tools) (`Registry` + per-tool `Tool` implementations). Agent-facing markdown skills under `SKILLS_MCP_SERVER_DIR` are separate (discovery via `list_skills` / `read_skill`). Callers such as **`agents-mcp-server`** should keep using stable tool names (`read_web`, etc.).
+Executable capabilities (`tools/list`, `tools/call`) are registered in Go via [`internal/tools`](internal/tools) (`Registry` + per-tool `Tool` implementations). Agent-facing markdown skills under `SKILLS_MCP_SERVER_DIR` are separate (discovery via `list_skills` / `read_skill`). Callers such as **`agents-mcp-server`** should keep using stable tool names (`read_web`, `create_google_doc`, etc.).
 
 `POST /mcp` with JSON-RPC 2.0:
 
@@ -71,3 +72,4 @@ Executable capabilities (`tools/list`, `tools/call`) are registered in Go via [`
   - `read_skill_resource`
   - `get_skill_resource_info`
   - `read_web`
+  - `create_google_doc` (Google OAuth refresh token + Docs/Drive scopes; see `.env.dev.example`)

@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/bimross/skills-mcp-server/internal/config"
+	"github.com/bimross/skills-mcp-server/internal/googledocs"
 	"github.com/bimross/skills-mcp-server/internal/httpapi"
 	"github.com/bimross/skills-mcp-server/internal/mcp"
 	"github.com/bimross/skills-mcp-server/internal/readweb"
@@ -30,9 +31,10 @@ func New(cfg config.Config) (*App, error) {
 		Model:             cfg.GeminiModel,
 		EnableWebResearch: cfg.EnableWebResearch,
 	})
+	googleDocs := googledocs.LoadFromEnv()
 	mux := http.NewServeMux()
-	httpapi.New(store, readWeb).Register(mux)
-	mcp.New(store, readWeb).Register(mux)
+	httpapi.New(store, readWeb, googleDocs).Register(mux)
+	mcp.New(store, readWeb, googleDocs).Register(mux)
 	return &App{handler: mux}, nil
 }
 

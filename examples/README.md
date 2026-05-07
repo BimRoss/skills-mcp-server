@@ -5,4 +5,5 @@ Each subdirectory is a standalone skill tree (`SKILL.md` + optional `references/
 | Directory | Notes |
 |-----------|--------|
 | `read-web` | Markdown for discovery; runtime calls MCP tool `read_web` — see `references/TOOL.md` |
+| `create-google-doc` | Markdown for discovery; runtime calls MCP tool `create_google_doc` (Google Docs + Drive sharing) — see `references/TOOL.md` |
 | `read-company-directory` | Instruction-only squad / company directory |

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/bimross/skills-mcp-server/internal/googledocs"
 	"github.com/bimross/skills-mcp-server/internal/readweb"
 	"github.com/bimross/skills-mcp-server/internal/skills"
 	"github.com/bimross/skills-mcp-server/internal/tools"
@@ -14,8 +15,8 @@ type Server struct {
 	registry *tools.Registry
 }
 
-func New(store *skills.Store, readWeb *readweb.Client) *Server {
-	return &Server{registry: tools.NewDefaultRegistry(store, readWeb)}
+func New(store *skills.Store, readWeb *readweb.Client, googleDocs googledocs.EnvConfig) *Server {
+	return &Server{registry: tools.NewDefaultRegistry(store, readWeb, googleDocs)}
 }
 
 func (s *Server) Register(mux *http.ServeMux) {

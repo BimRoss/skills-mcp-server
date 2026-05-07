@@ -8,22 +8,26 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/bimross/skills-mcp-server/internal/googledocs"
 	"github.com/bimross/skills-mcp-server/internal/readweb"
 	"github.com/bimross/skills-mcp-server/internal/skills"
+	"github.com/bimross/skills-mcp-server/internal/tools"
 )
 
 type Handler struct {
-	store   *skills.Store
-	readWeb *readweb.Client
+	store      *skills.Store
+	readWeb    *readweb.Client
+	googleDocs googledocs.EnvConfig
 }
 
-func New(store *skills.Store, readWeb *readweb.Client) *Handler {
-	return &Handler{store: store, readWeb: readWeb}
+func New(store *skills.Store, readWeb *readweb.Client, googleDocs googledocs.EnvConfig) *Handler {
+	return &Handler{store: store, readWeb: readWeb, googleDocs: googleDocs}
 }
 
 func (h *Handler) Register(mux *http.ServeMux) {
 	mux.HandleFunc("/health", h.health)
 	mux.HandleFunc("/api/runtime/read-web", h.runtimeReadWeb)
+	mux.HandleFunc("/api/runtime/create-google-doc", h.runtimeCreateGoogleDoc)
 	mux.HandleFunc("/api/skills", h.skillsCollection)
 	mux.HandleFunc("/api/skills/", h.skillsResource)
 }
@@ -54,6 +58,29 @@ func (h *Handler) runtimeReadWeb(w http.ResponseWriter, r *http.Request) {
 		"finalSummary": result.Summary,
 		"citations":    result.Citations,
 	})
+}
+
+func (h *Handler) runtimeCreateGoogleDoc(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+	raw, err := io.ReadAll(r.Body)
+	if err != nil {
+		writeErr(w, http.StatusBadRequest, err)
+		return
+	}
+	out, err := tools.RunCreateGoogleDoc(r.Context(), h.googleDocs, raw)
+	if err != nil {
+		writeErr(w, http.StatusBadRequest, err)
+		return
+	}
+	m, ok := out.(map[string]any)
+	if !ok {
+		writeErr(w, http.StatusInternalServerError, errors.New("create_google_doc: unexpected result shape"))
+		return
+	}
+	writeJSON(w, http.StatusOK, m)
 }
 
 func (h *Handler) skillsCollection(w http.ResponseWriter, r *http.Request) {
