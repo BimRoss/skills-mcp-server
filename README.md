@@ -73,3 +73,17 @@ Executable capabilities (`tools/list`, `tools/call`) are registered in Go via [`
   - `get_skill_resource_info`
   - `read_web`
   - `create_google_doc` (OAuth: **`JOANNE_GOOGLE_*`** preferred in shared env; see `.env.dev.example`)
+
+## Production (Kubernetes)
+
+Runtime env for the cluster comes from Secret **`skills-mcp-server-runtime`** in namespace **`skills-mcp-server`** (see `rancher-admin` deployment). `rancher-admin/scripts/sync-app-pull-secrets.sh` only copies **`dockerhub-pull`**; it does **not** set `GEMINI_API_KEY` or Google OAuth.
+
+Push or refresh the runtime secret from a trusted machine (`.env.prod` in this repo, or e.g. `ENV_FILE=../agents-mcp-server/.env.prod` if you keep Joanne Google keys there):
+
+```bash
+./scripts/update-rancher-secrets.sh
+# or
+ENV_FILE=/path/to/.env.prod ./scripts/update-rancher-secrets.sh
+```
+
+`makeacompany-ai/scripts/update-rancher-secrets.sh` updates **`makeacompany-ai-runtime-secrets`** (portal `GOOGLE_OAUTH_*`); that does **not** populate this service—`create_google_doc` needs the keys on **`skills-mcp-server-runtime`**.
