@@ -18,7 +18,7 @@ func (t *createGoogleDocTool) Name() string { return "create_google_doc" }
 func (t *createGoogleDocTool) Definition() map[string]any {
 	return map[string]any{
 		"name":        "create_google_doc",
-		"description": "Create a Google Doc, insert body text, and grant Drive sharing to listed emails (editor/commenter/viewer). Sends Drive invite notifications by default so recipients without an existing Google account can accept access. Use when the user wants a shared Google document, meeting notes in Docs, or a draft others can edit. Requires server OAuth refresh token + Docs/Drive scopes. Editors/commenters/viewers must be valid email addresses.",
+		"description": "Create a Google Doc, insert body text, and grant Drive sharing to listed emails (editor/commenter/viewer). Sends Drive invite notifications by default so recipients without an existing Google account can accept access. Use when the user wants a shared Google document, meeting notes in Docs, or a draft others can edit. Requires server OAuth refresh token + Docs/Drive scopes. Editors/commenters/viewers must be valid email addresses. When the doc should reflect research-heavy or time-sensitive web facts, call read_web first (or use an existing read_web tool result already in the thread, including server-injected research) and ground body/intent on that summary.",
 		"inputSchema": map[string]any{
 			"type":     "object",
 			"required": []string{"intent", "title", "editors"},

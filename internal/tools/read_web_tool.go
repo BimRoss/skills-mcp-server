@@ -16,7 +16,7 @@ func (t *readWebTool) Name() string { return "read_web" }
 func (t *readWebTool) Definition() map[string]any {
 	return map[string]any{
 		"name":        "read_web",
-		"description": "Run internet research and return summary with citations",
+		"description": "Run internet research and return a concise summary with citations. Prefer calling this before create_google_doc when the document body should reflect fresh or external facts (news, statistics, \"current state of…\", papers, surveys); pass a tight query. If the thread already shows a read_web result for the same request (including server-prefixed research), treat it as grounding rather than repeating identical research unless the user asks for more.",
 		"inputSchema": map[string]any{
 			"type":       "object",
 			"required":   []string{"query"},

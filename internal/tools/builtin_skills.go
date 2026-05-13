@@ -17,7 +17,7 @@ func (t *listSkillsTool) Name() string { return "list_skills" }
 func (t *listSkillsTool) Definition() map[string]any {
 	return map[string]any{
 		"name":        "list_skills",
-		"description": "Return registered agent skills (id, description, metadata). Use when the user asks what skills or capabilities exist, what you can do, what tools are available, or wants a skimmable catalog before deeper reads. Optional `query` filters by substring over name/description.",
+		"description": "Return packaged Agent Skill entries (folder id, description, metadata) from disk—this is the SKILL.md catalog, not the list of MCP executable tools. Use for skimmable catalogs, browsing packaged guidance, or before read_skill when you need ids. Optional `query` filters by substring over name/description. When the user asks what MCP tools or invocable tools exist, summarize from the tools you were given in this session; call this when they want the packaged skill library (or both, if unclear).",
 		"inputSchema": map[string]any{
 			"type":       "object",
 			"properties": map[string]any{"query": map[string]any{"type": "string"}},
@@ -78,7 +78,7 @@ func (t *readSkillTool) Name() string { return "read_skill" }
 func (t *readSkillTool) Definition() map[string]any {
 	return map[string]any{
 		"name":        "read_skill",
-		"description": "Load full markdown instructions for one skill. Required argument `name` is the skill id (the catalog folder name). Use when the user names a skill, asks to read or follow packaged guidance, or when the answer should come from stored skill text—not free recall alone. For squad/company directory, who works here, which agents or specialists exist, introductions, or phrases like \"read the company directory\": prefer read_skill once you know the id (search_skills with query like \"directory\" or \"roster\" if needed); many deployments ship a `read-company-directory` skill for that.",
+		"description": "Load full markdown instructions for one packaged skill. Required argument `name` is the skill id (folder name from list_skills or search_skills). Use when the user names a skill, asks to follow packaged guidance, or when answers should come from stored SKILL.md text—not free recall alone. For directory/roster-style questions, use search_skills with relevant keywords to find the deployment's skill id first; ids are deployment-specific—never present a skill folder name as if it were an MCP tool name.",
 		"inputSchema": map[string]any{
 			"type":       "object",
 			"required":   []string{"name"},
