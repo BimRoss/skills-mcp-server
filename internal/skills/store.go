@@ -142,6 +142,9 @@ func (s *Store) DeleteSkill(name string) error {
 	if err := validateName(name); err != nil {
 		return err
 	}
+	if !s.HasSkillMD(name) {
+		return ErrNotFound
+	}
 	dir := filepath.Join(s.root, name)
 	if err := os.RemoveAll(dir); err != nil {
 		return fmt.Errorf("remove skill: %w", err)

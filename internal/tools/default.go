@@ -16,6 +16,9 @@ func NewDefaultRegistry(store *skills.Store, readWeb *readweb.Client, googleDocs
 	r.MustRegister(&listSkillResourcesTool{store: store})
 	r.MustRegister(&readSkillResourceTool{store: store})
 	r.MustRegister(&getSkillResourceInfoTool{store: store})
+	r.MustRegister(&createSkillTool{store: store})
+	r.MustRegister(&updateSkillTool{store: store})
+	r.MustRegister(&deleteSkillTool{store: store})
 	r.MustRegister(&readWebTool{client: readWeb})
 	r.MustRegister(&createGoogleDocTool{cfg: googleDocs})
 	return r
